@@ -11,13 +11,13 @@ func Login(c *fiber.Ctx) error {
 	var token string
 	json := new(models.User)
 	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code":    400,
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"code":    fiber.StatusBadRequest,
 			"message": "Invalid JSON",
 		})
 	}
 	code, msg, token := services.Login(json)
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 		"data": M{
@@ -29,8 +29,8 @@ func Login(c *fiber.Ctx) error {
 func Register(c *fiber.Ctx) error {
 	json := new(models.User)
 	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code":    400,
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"code":    fiber.StatusBadRequest,
 			"message": "Invalid JSON",
 		})
 	}

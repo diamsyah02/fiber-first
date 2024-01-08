@@ -11,7 +11,7 @@ import (
 
 func GetAllProduct(c *fiber.Ctx) error {
 	code, msg, data := services.GetAllProduct()
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 		"data":    data,
@@ -25,7 +25,7 @@ func GetProductById(c *fiber.Ctx) error {
 		log.Fatal(err)
 	}
 	code, msg, data := services.GetProductById(id)
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 		"data":    data,
@@ -35,13 +35,13 @@ func GetProductById(c *fiber.Ctx) error {
 func StoreProduct(c *fiber.Ctx) error {
 	json := new(models.Product)
 	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code":    400,
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"code":    fiber.StatusBadRequest,
 			"message": "Invalid JSON",
 		})
 	}
 	code, msg := services.StoreProduct(json)
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 	})
@@ -50,8 +50,8 @@ func StoreProduct(c *fiber.Ctx) error {
 func UpdateProduct(c *fiber.Ctx) error {
 	json := new(models.Product)
 	if err := c.BodyParser(json); err != nil {
-		return c.JSON(fiber.Map{
-			"code":    400,
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"code":    fiber.StatusBadRequest,
 			"message": "Invalid JSON",
 		})
 	}
@@ -61,7 +61,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 		log.Fatal(err)
 	}
 	code, msg := services.UpdateProduct(id, json)
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 	})
@@ -74,7 +74,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 		log.Fatal(err)
 	}
 	code, msg := services.DeleteProduct(id)
-	return c.JSON(fiber.Map{
+	return c.Status(code).JSON(fiber.Map{
 		"code":    code,
 		"message": msg,
 	})
